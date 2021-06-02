@@ -2,25 +2,25 @@ version: '3'
 
 services:
   node_server:
-    build: src/.
+    build: .
     # build from Dockerfile
     ports:
-     - "3000:3000"
+     - "4000:4000"
     volumes:
-     - :/src
+     - ./_data:/var/lib/app
     depends_on: 
      - mysql
-     - reddis
+    #  - reddis
   # redis:
   #   image: redis
   mysql:
     image: mysql:8.0
-    env_file: ./env
+    env_file: .env
     environment: 
       - MYSQL_DATABASE=$MYSQL_DATABASE
       - MYSQL_USER=$MYSQL_USER
       - MYSQL_PASSWORD=$MYSQL_PASSWORD
       - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
     volumes:
-      - :/app/sql
+      - ./_data:/var/lib/mysql
 
