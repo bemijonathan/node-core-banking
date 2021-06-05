@@ -8,6 +8,7 @@ services:
      - "4000:4000"
     volumes:
      - ./_data:/var/lib/app
+     - ./nodemon.json:/app/nodemon.json
     depends_on: 
      - mysql
     #  - reddis
@@ -16,11 +17,13 @@ services:
   mysql:
     image: mysql:8.0
     env_file: .env
+    ports:
+      - "33061:3306"
     environment: 
-      - MYSQL_DATABASE=$MYSQL_DATABASE
-      - MYSQL_USER=$MYSQL_USER
-      - MYSQL_PASSWORD=$MYSQL_PASSWORD
-      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE:$MYSQL_DATABASE
+      - MYSQL_USER:$MYSQL_USER
+      - MYSQL_PASSWORD:$MYSQL_PASSWORD
+      - MYSQL_ROOT_PASSWORD:$MYSQL_ROOT_PASSWORD
     volumes:
       - ./_data:/var/lib/mysql
 
