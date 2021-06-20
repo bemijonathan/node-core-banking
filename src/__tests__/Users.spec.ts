@@ -9,117 +9,112 @@ import app from "../server";
 
 // test that the users Db Exix
 
-var connection: Connection | undefined ;
+const userObject = {
+    "email": "testsdfdf@jonathan.com",
+    "lastName": "Jona",
+    "external_id": "23452345dsgs",
+    "photo": "https://tpyasdfadsf.com/asdfsd.jpg",
+    "document": "",
+    "occupation": "Teacher",
+    "phone": "9348205346"
+}
 
-beforeAll(() => {
-    createConnection({
+beforeAll(async () => {
+    await createConnection({
         type: "mysql",
-        host: process.env.db_host || "localhost",
+        host: "localhost",
         port: 3306,
-        username: process.env.DB_USER || "root",
-        password: process.env.PASSWORD || "root",
-        database: process.env.DATABASE_NAME || "bankingAppTest",
+        username: "root",
+        password: "root",
+        database: "bankingAppTest",
         entities: [
-            __dirname + "/entity/*.ts"
+            User
         ],
         synchronize: true,
-        // logging: false
-    }).then(async connection => {
-        connection = connection
-    }).catch(error => console.log(error));
+        // logging: true
+    })
 
 })
 
-afterAll( async() => {
+afterAll(async () => {
+    await getConnection().dropDatabase()
     await getConnection().close()
     console.log('connection closed')
 })
 
 describe('the Users Table is created and has the appropraite characteristics', () => {
     it('should have the users table created', async () => {
-        const connect = await connection!.query(`SELECT count(*) FROM bankingApp-Test.TABLES WHERE (TABLE_NAME = 'Users')`)
-        expect(connect).toBe(1);
+        const connect = await getRepository(User).query(`SELECT count(*) FROM bankingAppTest.user`)
+        expect(+connect[0]["count(*)"]).toBe(0);
     });
 
-    it('should be able to save users with the respective field', async () => {
+    // it('should be able to save users with the respective field', async () => {
 
-        let user = await getConnection()
-            .createQueryBuilder()
-            .insert()
-            .into(User)
-            .values({
-                firstName: "Jonathan",
-                lastName: "John",
-                age: 40,
-            })
-            .execute()
+    //     let user = await getConnection()
+    //         .createQueryBuilder()
+    //         .insert()
+    //         .into(User)
+    //         .values({
+    //             firstName: "Jonathan",
+    //             lastName: "John",
+    //             age: 40,
+    //         })
+    //         .execute()
 
-        expect(user).toBeTruthy
-        console.log(user)
-        expect(typeof user).toBeDefined();
-    })
+    //     expect(user).toBeTruthy
+    //     console.log(user)
+    //     expect(typeof user).toBeDefined();
+    // })
 });
 
 describe('expect that crud operations works correctly', () => {
     it('should create Users', (done) => {
-       supertest(app)
-       .post('/users')
-       .send({
-           firstName:"Jonathan",
-           lastName:"Atiene",
-           age: 40,
-           uuid: "34e25634"
-       })
-       .set("accept", "application/json")
-       .expect(201, done)
+        supertest(app)
+            .post('/user')
+            .send(userObject)
+            .set("accept", "application/json")
+            .expect(201, done)
     });
 
     it('should get user  details', (done) => {
         supertest(app)
-        .get('user/34e25634')
-        .expect(200).then( res => {
-            expect(res.body.firstName === 'Jonathan')
-            done()
-        })
+            .get('/user/1')
+            .expect(200).then(res => {
+                expect(res.body.firstName).toBeFalsy()
+                done()
+            })
     });
 
 
     it('should update and delete users', (done) => {
         supertest(app)
-        .patch('/users/34e25634')
-        .send({
-            firstName:"Jonat",
-            lastName:"Atiene",
-            age: 40,
-            uuid: "34e25634"
-        })
-        .set("accept", "application/json")
-        .expect(200).then (res => {
-            expect(res.body.firstName).toBe("Jonat")
-        })
-
+            .patch('/user/1')
+            .send({
+                photo: userObject.photo + 'Help.png'
+            })
+            .set("accept", "application/json")
+            .expect(200, done)
     });
 
 
     it('should update users', (done) => {
         supertest(app)
-        .patch('/users/34e25634')
-        .send({
-            firstName:"Jonat",
-            lastName:"Atiene",
-            age: 40,
-            uuid: "34e25634"
-        })
-        .set("accept", "application/json")
-        .expect(200).then (res => {
-            expect(res.body.firstName).toBe("Jonat")
-        })
+            .patch('/user/1')
+            .send({
+                firstName: "Jonat",
+            })
+            .set("accept", "application/json")
+            .expect(200).then(res => {
+                expect(res.body.data.firstName).toBe("Jonat")
+                done()
+            })
+
 
     });
 
     it('should delete users', (done) => {
         supertest(app)
-        .delete('/users/34e25634')
-        .expect(200, done)
+            .delete('/user/1')
+            .expect(200, done)
     });
 })

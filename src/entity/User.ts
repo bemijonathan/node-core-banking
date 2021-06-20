@@ -2,29 +2,29 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 import { UserInterface } from "../types/user";
 
 @Entity()
-export class User  {
+export class User {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column()
+    @Column({ nullable: true })
     firstName!: string;
 
-    @Column()
+    @Column({ nullable: true })
     lastName!: string;
 
-    @Column()
+    @Column({ nullable: true })
     age!: number;
 
-    @Column()
+    @Column({ nullable: true })
     photo!: string;
-    @Column()
+    @Column({ nullable: true })
     document!: string;
-    @Column()
+    @Column({ nullable: true })
     occupation!: string;
     @Column()
     email!: string;
-    @Column()
+    @Column({ nullable: true })
     phone!: string;
-    @Column()
+    @Column({ nullable: true })
     external_id!: string;
 }

@@ -6,3 +6,4 @@ tmp/
 temp/
 .env
 dev.env
+_data/

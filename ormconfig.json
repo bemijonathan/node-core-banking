@@ -5,6 +5,7 @@
    "username": "root",
    "password": "root",
    "database": "bankingApp",
+   "synchronize": true,
    "entities": [
       "src/entity/**/*.ts"
    ],

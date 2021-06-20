@@ -6,14 +6,14 @@ const userRoute = Router();
 userRoute.route('/')
     .post(celebrate({
         body: Joi.object({
-            firstName: Joi.string().optional(),
-            lastNamed: Joi.string().optional(),
+            firstName: Joi.string().optional().allow(""),
+            lastName: Joi.string().optional().allow(""),
             email: Joi.string().email().required(),
-            external_id: Joi.any().required(),
+            external_id: Joi.any().required().required(),
             photo: Joi.string(),
-            document: Joi.string(),
+            document: Joi.string().optional().allow(""),
             occupation: Joi.string(),
-            phone: Joi.string(),
+            phone: Joi.string().required(),
         })
     }),
         UserCntrl.createUser
@@ -29,12 +29,16 @@ userRoute.route('/:id')
         UserCntrl.getUserDetails
     )
     .patch(celebrate({
+        params: Joi.object({
+            id: Joi.alternatives(Joi.string(), Joi.number()).optional(),
+        }),
         body: Joi.object({
             firstName: Joi.string().optional(),
-            photo: Joi.string(),
-            document: Joi.string(),
-            occupation: Joi.string(),
-            phone: Joi.string(),
+            lastName: Joi.string().optional().allow(""),
+            photo: Joi.string().optional().uri(),
+            document: Joi.string().optional().allow(""),
+            occupation: Joi.string().optional().allow(""),
+            phone: Joi.string().optional().allow(""),
         })
     }),
 
@@ -43,10 +47,10 @@ userRoute.route('/:id')
     .delete(celebrate({
         params: Joi.object({
             id: Joi.alternatives(Joi.string(), Joi.number()).optional(),
-            email: Joi.string().email().trim().lowercase().optional()
         })
     }),
         UserCntrl.deleteUserDetails
     )
 
 
+export default userRoute
