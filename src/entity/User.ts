@@ -1,8 +1,8 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { UserInterface } from "../types/user";
 
 @Entity()
-export class User {
-
+export class User  {
     @PrimaryGeneratedColumn()
     id!: number;
 
@@ -15,4 +15,16 @@ export class User {
     @Column()
     age!: number;
 
+    @Column()
+    photo!: string;
+    @Column()
+    document!: string;
+    @Column()
+    occupation!: string;
+    @Column()
+    email!: string;
+    @Column()
+    phone!: string;
+    @Column()
+    external_id!: string;
 }

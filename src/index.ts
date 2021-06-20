@@ -14,8 +14,8 @@ createConnection({
     entities: [
         `${__dirname}/entity/*.ts`,
     ],
-}).then(async () => {
-    console.log('DB connected successful');
+}).then(async (connection) => {
+    (global as any).connection  = connection
 }).catch((error) => console.log(error));
 
 const PORT: number | string = process.env.PORT || 4000;
