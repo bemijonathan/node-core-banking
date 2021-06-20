@@ -31,5 +31,4 @@ workflows:
   orb-free-workflow:
     jobs:
         - install
-        test:
-          - install
+        - test
