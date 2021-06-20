@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   install: 
     docker:
-      - image: cimg/node:14
+      - image: node:14-alpine
     steps: 
       - checkout
       - save_cache:
@@ -15,7 +15,7 @@ jobs:
           command: npm ci
   test:
     docker:
-      - image: cimg/node:14
+      - image: node:14-alpine
     steps:
       - checkout
       - restore_cache:
