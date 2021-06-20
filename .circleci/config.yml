@@ -28,7 +28,10 @@ jobs:
           command: npm run test
 
 workflows:
-  orb-free-workflow:
+  version: 2
+  build-test-and-deploy:
     jobs:
-        - install
-        - test
+      - install
+      - test:
+          requires:
+            - install
