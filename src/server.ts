@@ -4,6 +4,7 @@ import { createConnection } from 'typeorm';
 import winston from 'winston';
 import { Loggly } from 'winston-loggly-bulk'
 import userRoute from './routes/users';
+import walletRoute from './routes/wallets';
 import { errorResponse } from './utils/response';
 import bodyParser from 'body-parser';
 
@@ -24,6 +25,8 @@ const app = express()
 app.use(bodyParser({ limit: 500000, type: 'json' }))
 
 app.use('/user', userRoute)
+
+app.use('/wallet', walletRoute)
 
 app.use('*', (req, res) => {
     return errorResponse(res, "route not found", 404)

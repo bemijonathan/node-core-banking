@@ -13,3 +13,6 @@ COPY . .
 EXPOSE 4000
 
 CMD [ "npm" , "run", "start:dev" ]
+
+
+# credict the card if the person passes the eligibility

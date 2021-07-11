@@ -1,14 +1,17 @@
 import { Request, Response } from "express";
 import { getConnection, getManager, getRepository, Repository } from "typeorm";
 import { User } from "../entity/User";
+import { WalletService } from "../services/wallets";
 import { errorResponse, successRes } from "../utils/response";
 
 const UserRepository = () => getRepository(User)
 
 class UserController {
 
-    private userRepo() {
+    private walletService = new WalletService();
 
+
+    private userRepo() {
         return getRepository(User)
     }
     createUser = async (req: Request, res: Response) => {
@@ -25,9 +28,8 @@ class UserController {
             }
             user = await this.userRepo().save(req.body)
             console.log(user)
-            /**
-             * create wallet for user
-             */
+            this.walletService.createWallet(user!.id).then()
+
             return successRes(res, user, "successfully created user", 201)
         } catch (error) {
             console.log(error)
@@ -86,9 +88,10 @@ class UserController {
             if (!user) {
                 return errorResponse(res, "record not found", 404)
             }
-            await this.userRepo().remove(user)
+            await this.userRepo().softDelete(user)
             return successRes(res, {})
         } catch (error) {
+            console.log(error.message)
             return errorResponse(res, "server error", 500)
         }
     }

@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, OneToMany, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
 import { UserInterface } from "../types/user";
+import { Transactions } from "./Transactions";
+import { Wallet } from "./wallet";
 
 @Entity()
 export class User {
@@ -27,4 +29,19 @@ export class User {
     phone!: string;
     @Column({ nullable: true })
     external_id!: string;
+
+    @OneToOne(() => Wallet, {
+        onDelete: "SET NULL"
+    })
+    @JoinColumn()
+    wallet!: Wallet
+
+    @CreateDateColumn()
+    created_at!: Date;
+
+    @UpdateDateColumn()
+    updated_at!: Date;
+
+    @DeleteDateColumn()
+    deletedAt!: Date
 }

@@ -2,7 +2,9 @@
 
 import supertest from "supertest";
 import { Connection, createConnection, Db, getConnection, getRepository } from "typeorm";
+import { Transactions } from "../entity/Transactions";
 import { User } from "../entity/User";
+import { Wallet } from "../entity/wallet";
 import app from "../server";
 
 
@@ -28,9 +30,10 @@ beforeAll(async () => {
         password: "root",
         database: "bankingAppTest",
         entities: [
-            User
+            User, Wallet, Transactions
         ],
         synchronize: true,
+        
         // logging: true
     })
 
